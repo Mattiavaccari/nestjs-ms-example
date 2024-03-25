@@ -8,6 +8,9 @@ export class EnvironmentSchema {
   MICROSERVICES_TCP_PORT: string;
 
   @IsOptional()
+  MICROSERVICES_REDIS_HOST: string;
+
+  @IsOptional()
   TYPEORM_POSTGRES_HOST: string;
 
   @IsOptional()

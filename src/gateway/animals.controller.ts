@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { CreateAnimalDTO, GetAnimalDTO } from './dtos';
-import { NetworkingService } from '@example/core/networking/networking.service';
+import { NetworkingService } from '@example/core/networking';
 import { AnimalRTO } from './rtos';
 import { DogRTO } from '@example/dog';
 import { CatRTO } from '@example/cat';

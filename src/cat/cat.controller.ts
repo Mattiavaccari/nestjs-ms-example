@@ -3,22 +3,27 @@ import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CatService } from './cat.service';
 import { CatRTO } from './rtos';
 import { CreateOneCatDTO, GetOneCatDTO } from './dtos';
+import { NetworkingService } from '@example/core/networking';
 
 @Controller()
 export class CatController {
-  constructor(private readonly catService: CatService) {}
+  constructor(
+    private readonly catService: CatService,
+    private readonly networking: NetworkingService,
+  ) {}
 
   @MessagePattern('cat.getOne')
   async getDog(@Payload() data: GetOneCatDTO): Promise<CatRTO> {
-    const dog = await this.catService.getOne(data.id);
+    const cat = await this.catService.getOne(data.id);
 
-    return CatRTO.fromEntity(dog);
+    return CatRTO.fromEntity(cat);
   }
 
   @MessagePattern('cat.createOne')
   async createDog(@Payload() data: CreateOneCatDTO): Promise<CatRTO> {
-    const createdDog = await this.catService.addOne(data);
+    const createdCat = await this.catService.addOne(data);
+    this.networking.emit('cat.created', createdCat);
 
-    return CatRTO.fromEntity(createdDog);
+    return CatRTO.fromEntity(createdCat);
   }
 }

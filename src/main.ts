@@ -8,9 +8,11 @@ async function bootstrap() {
 
   const config = app.get<ConfigService>(ConfigService);
   const tcpConfig = config.get('microservices.tcp');
+  const redisConfig = config.get('microservices.redis');
   const port = config.get('server.port');
 
   app.connectMicroservice(tcpConfig);
+  app.connectMicroservice(redisConfig);
 
   await app.startAllMicroservices();
   await app.listen(port);
