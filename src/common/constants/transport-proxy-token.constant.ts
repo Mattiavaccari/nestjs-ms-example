@@ -1,0 +1,3 @@
+export const TRANSPORT_PROXY = {
+  TCP: 'TCP_MICROSERVICE',
+};
