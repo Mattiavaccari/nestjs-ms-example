@@ -18,6 +18,11 @@ import { CatRTO } from '@example/cat';
 export class AnimalsController {
   constructor(private readonly networking: NetworkingService) {}
 
+  @Get('/users')
+  getUsers(){
+      return 'the users';
+  }
+
   @Get('/animal/:id')
   async getAnimal(
     @Param('id') id: string,
