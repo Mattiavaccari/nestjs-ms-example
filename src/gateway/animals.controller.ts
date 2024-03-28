@@ -5,10 +5,11 @@ import {
   Inject,
   Param,
   Post,
+  Put,
   Query,
 } from '@nestjs/common';
 
-import { CreateAnimalDTO, GetAnimalDTO } from './dtos';
+import { CreateAnimalDTO, GetAnimalDTO, UpdateAnimalDTO } from './dtos';
 import { NetworkingService } from '@example/core/networking';
 import { AnimalRTO } from './rtos';
 import { DogRTO } from '@example/dog';
@@ -31,6 +32,20 @@ export class AnimalsController {
     const pattern = `${query.animalType}.getOne`;
     const response = await this.networking.send<DogRTO | CatRTO>(pattern, {
       id: id,
+    });
+
+    return AnimalRTO.fromAnimalRTO(response);
+  }
+
+  @Put('/animal/:id')
+  async updateAnimal(
+    @Param('id') id: string,
+    @Body() body: UpdateAnimalDTO,
+  ): Promise<AnimalRTO> {
+    const pattern = `${body.animalType}.updateOne`;
+    const response = await this.networking.send<DogRTO | CatRTO>(pattern, {
+      id: id,
+      name: body.name,
     });
 
     return AnimalRTO.fromAnimalRTO(response);

@@ -2,7 +2,7 @@ import { Controller } from '@nestjs/common';
 import { MessagePattern, Payload } from '@nestjs/microservices';
 import { CatService } from './cat.service';
 import { CatRTO } from './rtos';
-import { CreateOneCatDTO, GetOneCatDTO } from './dtos';
+import { CreateOneCatDTO, GetOneCatDTO, UpdateCatDTO } from './dtos';
 import { NetworkingService } from '@example/core/networking';
 
 @Controller()
@@ -25,5 +25,18 @@ export class CatController {
     this.networking.emit('cat.created', createdCat);
 
     return CatRTO.fromEntity(createdCat);
+  }
+
+  @MessagePattern('cat.updateOne')
+  async updateCat(@Payload() data: UpdateCatDTO): Promise<CatRTO | null> {
+    const cat = await this.catService.getOne(data.id);
+    if (cat) {
+      cat.name = data.name; // Change the name of the dog
+      const updatedCat = await this.catService.updateOne(data, data.id); // Pass both data and data.id as arguments
+      if (updatedCat !== undefined) {
+        return CatRTO.fromEntity(updatedCat);
+      }
+    }
+    return null; // Return null when updatedCat is void
   }
 }

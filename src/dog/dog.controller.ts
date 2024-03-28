@@ -5,7 +5,7 @@ import {
   Payload,
   Transport,
 } from '@nestjs/microservices';
-import { CreateOneDogDTO, GetOneDogDTO } from './dtos';
+import { CreateOneDogDTO, GetOneDogDTO, UpdateDogDTO } from './dtos';
 import { DogService } from './dog.service';
 import { DogRTO } from './rtos';
 import { CatRTO } from '@example/cat';
@@ -28,6 +28,17 @@ export class DogController {
     const createdDog = await this.dogService.addOne(data);
 
     return DogRTO.fromEntity(createdDog);
+  }
+
+  @MessagePattern('dog.updateOne')
+  async updateDog(@Payload() data: UpdateDogDTO): Promise<DogRTO> {
+    const dog = await this.dogService.getOne(data.id);
+    if (dog) {
+      dog.name = data.name; // Change the name of the dog
+      const updatedDog = await this.dogService.updateOne(data, data.id); // Pass both data and data.id as arguments
+      return DogRTO.fromEntity(updatedDog);
+    }
+    return new DogRTO({}); // Return an instance of DogRTO when dog is null
   }
 
   @EventPattern('cat.created', Transport.REDIS)
