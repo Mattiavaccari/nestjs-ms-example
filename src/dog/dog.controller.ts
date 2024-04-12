@@ -47,4 +47,11 @@ export class DogController {
       `Cat named "${cat.name}" entered the arena. Dogs are barking!`,
     );
   }
+
+  @EventPattern('cat.created', Transport.REDIS)
+  async handleCat2Created(cat: CatRTO) {
+    this.logger.log(
+      `Cat named "${cat.name}" entered the arena. Dogs are barking!`,
+    );
+  }
 }
