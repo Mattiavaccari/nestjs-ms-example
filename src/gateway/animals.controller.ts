@@ -120,4 +120,24 @@ export class AnimalsController {
 
     return AnimalRTO.fromAnimalRTO(response);
   }
+
+  @Post('/animal')
+  async create8Animal(@Body() body: CreateAnimalDTO): Promise<AnimalRTO> {
+    const pattern = `${body.animalType}.createOne`;
+    const response = await this.networking.send<DogRTO | CatRTO>(pattern, {
+      name: body.name,
+    });
+
+    return AnimalRTO.fromAnimalRTO(response);
+  }
+
+  @Post('/animal')
+  async create9Animal(@Body() body: CreateAnimalDTO): Promise<AnimalRTO> {
+    const pattern = `${body.animalType}.createOne`;
+    const response = await this.networking.send<DogRTO | CatRTO>(pattern, {
+      name: body.name,
+    });
+
+    return AnimalRTO.fromAnimalRTO(response);
+  }
 }
