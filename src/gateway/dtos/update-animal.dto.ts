@@ -8,4 +8,7 @@ export class UpdateAnimalDTO {
 
   @IsString()
   name: string;
+
+  @IsString()
+  surname: string;
 }
