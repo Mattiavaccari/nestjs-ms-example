@@ -39,4 +39,17 @@ export class CatController {
     }
     return null; // Return null when updatedCat is void
   }
+
+  @MessagePattern('cat.updateOne')
+  async update2Cat(@Payload() data: UpdateCatDTO): Promise<CatRTO | null> {
+    const cat = await this.catService.getOne(data.id);
+    if (cat) {
+      cat.name = data.name; // Change the name of the dog
+      const updatedCat = await this.catService.updateOne(data, data.id); // Pass both data and data.id as arguments
+      if (updatedCat !== undefined) {
+        return CatRTO.fromEntity(updatedCat);
+      }
+    }
+    return null; // Return null when updatedCat is void
+  }
 }
